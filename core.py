@@ -96,12 +96,12 @@ class PinaColada(object):
             if pkt.type == 0 and pkt.subtype == 8:
                 if pkt.addr2 not in ap_list:
                     ap_list.append(pkt.addr2)
-                    print "AP MAC: %s with SSID: %s " % (pkt.addr2, pkt.info)
+                    print ("AP MAC: %s with SSID: %s " % (pkt.addr2, pkt.info))
 
     def get_wifis(self):
-        print GOOD + "Sniffing for Wifi Beacons"
+        print (GOOD + "Sniffing for Wifi Beacons")
         for network in wifi_scan():
-            print network
+            print (network)
 
 
     def get_capabilities(self, category=None):

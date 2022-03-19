@@ -23,15 +23,15 @@ class PinaColadaCLI(cmd.Cmd):
         self.core = core.PinaColada()
         self.ctrlc = False
         self.ascii_art()
-        print "Welcome to Pina Colada, a powerful Wifi Dropbox. Type \"help\" to see the list of available commands."
-        print "Defaulting to interface %s (%s)." % (self.core.default_iface, self.core.get_local_ip(self.core.default_iface))
+        print ("Welcome to Pina Colada, a powerful Wifi Dropbox. Type \"help\" to see the list of available commands.")
+        print ("Defaulting to interface %s (%s)." % (self.core.default_iface, self.core.get_local_ip(self.core.default_iface)))
 
     def ascii_art(self):
-        print "    ____  _  /\//          ______      __          __        ' ."    
-        print "   / __ \(_)//\/ ____ _   / ____/___  / /___ _____/ /___ _   \~~~/"
-        print "  / /_/ / / __ \/ __ `/  / /   / __ \/ / __ `/ __  / __ `/    \_/"
-        print " / ____/ / / / / /_/ /  / /___/ /_/ / / /_/ / /_/ / /_/ /      Y"
-        print "/_/   /_/_/ /_/\__,_/   \____/\____/_/\__,_/\__,_/\__,_/      _|_"
+        print ("    ____  _  /\//          ______      __          __        ' ."    )
+        print ("   / __ \(_)//\/ ____ _   / ____/___  / /___ _____/ /___ _   \~~~/")
+        print ("  / /_/ / / __ \/ __ `/  / /   / __ \/ / __ `/ __  / __ `/    \_/")
+        print (" / ____/ / / / / /_/ /  / /___/ /_/ / / /_/ / /_/ / /_/ /      Y")
+        print ("/_/   /_/_/ /_/\__,_/   \____/\____/_/\__,_/\__,_/\__,_/      _|_")
 
     def print_help(self, lst):
         it = iter(lst)
@@ -39,8 +39,8 @@ class PinaColadaCLI(cmd.Cmd):
             print("{0:<20} {1:<25}".format(x, next(it)))
     
     def do_help(self, args):
-        print "\nAvailable commands are: "
-        print "======================="
+        print ("\nAvailable commands are: ")
+        print ("=======================")
         self.print_help(["list", "lists currently loaded targets, available capabilities, and enabled modules.", "quit", "quits","use <capability>", "engages a capability for use. Run \"list\" or \"list capabilities\" for a full list of capabilities.", "network", "shows all computers on the network", "discover", "use arp to discover all computers on the network and write to database", "wifi", "finds all wifi networks", "interface", "change interfaces", "promisc <enable/disable>", "enable or disable promiscuous mode", ])
     
     def do_quit(self, args):
@@ -61,28 +61,28 @@ class PinaColadaCLI(cmd.Cmd):
 
     def do_network(self, args):
         self.core.network.cur.execute("Select * from computers ORDER BY ip ASC")
-        print "ID\tIP\t\tMAC\t\t\tPorts\tLast Date"
+        print ("ID\tIP\t\tMAC\t\t\tPorts\tLast Date")
         for computer in self.core.network.cur.fetchall():
-            print str(computer[0]) + "\t" + str(computer[1]) + "\t" + str(computer[2]) + "\t" + str(computer[3]) + "\t" + str(computer[4])
+            print (str(computer[0]) + "\t" + str(computer[1]) + "\t" + str(computer[2]) + "\t" + str(computer[3]) + "\t" + str(computer[4]))
             
     def do_interface(self, args):
         if not args:
-            print "Available interfaces: %s" % ", ".join(self.core.get_available_interfaces())
+            print ("Available interfaces: %s" % ", ".join(self.core.get_available_interfaces()))
             return
         if self.core.set_interface(args):
-            print GOOD + "Successfully changed interface to %s. Using local IP %s." % (args, self.core.localIP)
+            print (GOOD + "Successfully changed interface to %s. Using local IP %s." % (args, self.core.localIP))
         else:
-            print BAD + "Could not use interface %s. (Is it enabled, and have an IP address?)" % (args)
+            print (BAD + "Could not use interface %s. (Is it enabled, and have an IP address?)" % (args))
 
     def do_promisc(self, args):
         if args == "enable":
             self.core.promisc()
-            print GOOD + "Promiscuous mode enabled for interface %s." % self.core.default_iface
+            print (GOOD + "Promiscuous mode enabled for interface %s." % self.core.default_iface)
         elif args == "disable":
             self.core.promisc(enable=False)
-            print GOOD + "Promiscuous mode disabled for interface %s." % self.core.default_iface
+            print (GOOD + "Promiscuous mode disabled for interface %s." % self.core.default_iface)
         else:
-            print BAD + "Unknown option %s. Usage: promisc <enable|disable>" % args
+            print (BAD + "Unknown option %s. Usage: promisc <enable|disable>" % args)
 
 
     def complete_use(self, text, line, begin_index, end_index):
@@ -123,7 +123,7 @@ class PinaColadaCLI(cmd.Cmd):
         self._globals = {}
 
     def do_history(self, args):
-        print self._hist
+        print (self._hist)
 
     def do_exit(self, args):
         self.quit()
@@ -135,10 +135,10 @@ class PinaColadaCLI(cmd.Cmd):
         
     def default(self, line):       
         try:
-            print GOOD + "Executing \"" + line + "\""
+            print (GOOD + "Executing \"" + line + "\"")
             os.system(line)
-        except Exception, e:
-            print e.__class__, ":", e 
+        except Exception as e:
+            print (e.__class__, ":", e )
     
     def cmdloop(self):
         try:
@@ -173,6 +173,6 @@ def main():
 
 if __name__ == "__main__":
     if os.getuid() != 0:
-        print BAD + "Please run me as root!"
+        print (BAD + "Please run me as root!")
         sys.exit()
     main()
